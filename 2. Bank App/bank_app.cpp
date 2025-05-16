@@ -10,6 +10,7 @@
 #include <fstream>
 #include <utility>
 #include <vector>
+#include <stdlib.h>
 using namespace std;
 
 class Accounts
@@ -28,8 +29,10 @@ public:
     };
 };
 
-Accounts::Accounts(string username, string password, float balance)
+Accounts::Accounts(string username_in, string password_in, float balance_in)
 {
+    username = username_in;
+    password = password_in;
     cout << username << " - Acount has been created!" << endl;
 }
 
@@ -43,41 +46,67 @@ public:
         return true;
     };
     bool login(string user, string pass){
-        
+        for (auto i:accounts){
+            if (user == i.getDetail().first && pass == i.getDetail().first){
+                cout << "Welcome!" << endl;
+                return true;
+            }
+        }
+        cout << "not found :(";
+        return false;
+    }
+    void getusers(){
+        for (auto i:accounts){
+            cout << i.getDetail().first << endl;
+        }
     }
 };
 
 int main() {
-    cout << R"(
-    *******************************************
-    *                                         *
-    *       BARTEK BANK MANAGEMENT SYSTEM     *
-    *                                         *
-    *******************************************
-    )" << endl;
-    
-    bank_app BartekBank;
-    
     int choice;
-    cout << "1. Create Account" << endl;
-    cout << "2. Login" << endl;
-    cout << "3. Exit" << endl;
-    cout << "Enter your choice: ";
-    cin >> choice;
-    
     string user_in, pass_in;
-    
-    switch (choice)
+    bank_app BartekBank;
+    system("cls");
+    while (true)
     {
-        case 1:
-        cin >> user_in;
-        cin >> pass_in;
         
-        break;
-    
-    default:
-        break;
-    }
-    
+        cout << R"(
+*******************************************
+*                                         *
+*       BARTEK BANK MANAGEMENT SYSTEM     *
+*                                         *
+*******************************************
+        )" << endl;
+        
+        
+        cout << "1. Create Account" << endl;
+        cout << "2. Login" << endl;
+        cout << "3. Exit" << endl;
+        cout << "Enter your choice: ";
+        cin >> choice;
+        
+
+        switch (choice)
+        {
+            case 1:
+                cout << "New Username: " << flush;
+                cin >> user_in;
+                cout << "Create Password: ";
+                cin >> pass_in;
+                BartekBank.createUser(user_in,pass_in);
+                BartekBank.getusers();
+                break;
+            case 2:
+                cout << "Username: ";
+                cin >> user_in;
+                cout << "Password: ";
+                cin >> pass_in;
+                BartekBank.login(user_in,pass_in);
+                break;
+        
+        default:
+            break;
+        }
+    };
     return 0;
 }
