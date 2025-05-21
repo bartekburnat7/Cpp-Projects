@@ -33,6 +33,8 @@ using namespace std;
 #define HIGH 3
 #define MED 2
 #define LOW 1
+
+#define noKeyErr "noKeyFound"
 /* Data For the Task Mngr*/
 namespace TaskData
 {
@@ -94,6 +96,24 @@ class task_manager
             };
             return 0;
         };
+        string extract_database_sub(string key){
+            ifstream reading_sub("my_database_sub.csv");
+            string line, field;
+            string line_parse[2];
+            while(getline(reading_sub,line)){
+                istringstream line_stream(line);
+                int i=0;
+                while(getline(line_stream,field,',')){
+                    line_parse[i]=field;
+                    i++;
+                };
+                if(line_parse[0]==key){
+                    return line_parse[1];
+                };
+            };
+            return noKeyErr;
+        }
+
         void create_user_main(){
             string name, username, password;
             cin >> name;
@@ -105,14 +125,13 @@ class task_manager
                 my_database.seekp(0, ios::end);
                 my_database << to_string(user_obj.ID) + "," +user_obj.name + "," +user_obj.username + "," +user_obj.password + "\n";
                 cout << "User created successfully!" << endl;
-            }
-
+            };
         }
 };
 // Run Task Manager
 
 int main(){
     task_manager mngr;
-    mngr.create_user_main();
+    cout << mngr.extract_database_sub("MY_BALLS") << endl;
     return 0;
 };
